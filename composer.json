@@ -1,0 +1,33 @@
+{
+    "name": "anilahir/omnipay-bambora",
+    "type": "library",
+    "description": "Bambora driver for the Omnipay payment processing library",
+    "keywords": [
+        "bambora",
+        "gateway",
+        "merchant",
+        "omnipay",
+        "pay",
+        "payment",
+        "payments"
+    ],
+    "homepage": "https://github.com/anilahir/omnipay-bambora",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Anil Ahir",
+            "email": "anil220.306@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Omnipay\\Bambora\\" : "src/" }
+    },
+    "require": {
+        "league/omnipay": "^3"
+    },
+    "require-dev": {
+        "omnipay/tests": "^3",
+        "squizlabs/php_codesniffer": "^3",
+        "phpro/grumphp": "^0.14"
+    }
+}

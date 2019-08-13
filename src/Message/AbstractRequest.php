@@ -48,32 +48,32 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     public function getPaymentMethod()
     {
-        return $this->getParameter('payment_method');
+        return $this->getParameter('paymentMethod');
     }
 
     public function setPaymentMethod($value)
     {
-        return $this->setParameter('payment_method', $value);
+        return $this->setParameter('paymentMethod', $value);
     }
 
     public function getPaymentProfile()
     {
-        return $this->getParameter('payment_profile');
+        return $this->getParameter('paymentProfile');
     }
 
     public function setPaymentProfile($value)
     {
-        return $this->setParameter('payment_profile', $value);
+        return $this->setParameter('paymentProfile', $value);
     }
 
     public function getOrderNumber()
     {
-        return $this->getParameter('order_number');
+        return $this->getParameter('orderNumber');
     }
 
     public function setOrderNumber($value)
     {
-        return $this->setParameter('order_number', $value);
+        return $this->setParameter('orderNumber', $value);
     }
 
     public function sendData($data)
@@ -91,7 +91,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         else {
             $httpResponse = $this->httpClient->request($this->getHttpMethod(), $this->getEndpoint(), $headers);
         }
-    
+
         try {
             $jsonRes = json_decode($httpResponse->getBody()->getContents(), true);
         }

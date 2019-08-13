@@ -27,53 +27,22 @@ class PurchaseRequest extends AbstractRequest
         );
 
         $paymentMethod = $this->getPaymentMethod();
+        $card = $this->getCard();
 
         switch ($paymentMethod)
         {
             case 'card' :
-                if ($this->getCard()) {
-                    $this->getCard()->validate();
+                if ($card) {
+                    $card->validate();
 
                     $data['card'] = array(
-                        'number' => $this->getCard()->getNumber(),
-                        'name' => $this->getCard()->getName(),
-                        'expiry_month' => $this->getCard()->getExpiryDate('m'),
-                        'expiry_year' => $this->getCard()->getExpiryDate('y'),
-                        'cvd' => $this->getCard()->getCvv(),
+                        'number' => $card->getNumber(),
+                        'name' => $card->getName(),
+                        'expiry_month' => $card->getExpiryDate('m'),
+                        'expiry_year' => $card->getExpiryDate('y'),
+                        'cvd' => $card->getCvv(),
                         'complete' => $this->complete,
                     );
-
-                    $billing = $this->getBilling();
-
-                    if (empty($billing)) {
-                        $data['billing'] = array(
-                            'name' => $this->getCard()->getBillingName(),
-                            'address_line1' => $this->getCard()->getBillingAddress1(),
-                            'address_line2' => $this->getCard()->getBillingAddress2(),
-                            'city' => $this->getCard()->getBillingCity(),
-                            'province' => $this->getCard()->getBillingState(),
-                            'country' => $this->getCard()->getBillingCountry(),
-                            'postal_code' => $this->getCard()->getBillingPostcode(),
-                            'phone_number' => $this->getCard()->getBillingPhone(),
-                            'email_address' => $this->getCard()->getEmail(),
-                        );
-                    }
-
-                    $shipping = $this->getShipping();
-
-                    if (empty($shipping)) {
-                        $data['shipping'] = array(
-                            'name' => $this->getCard()->getShippingName(),
-                            'address_line1' => $this->getCard()->getShippingAddress1(),
-                            'address_line2' => $this->getCard()->getShippingAddress2(),
-                            'city' => $this->getCard()->getShippingCity(),
-                            'province' => $this->getCard()->getShippingState(),
-                            'country' => $this->getCard()->getShippingCountry(),
-                            'postal_code' => $this->getCard()->getShippingPostcode(),
-                            'phone_number' => $this->getCard()->getShippingPhone(),
-                            'email_address' => $this->getCard()->getEmail(),
-                        );
-                    }
                 }
                 break;
 
@@ -92,14 +61,42 @@ class PurchaseRequest extends AbstractRequest
                 if ($this->getToken()) {
 
                     $data['token'] = [
-                        'card' => 'VI',
                         'code' => $this->getToken(),
-                        'complete' => $this->complete
+                        'complete' => $this->complete,
+                        'name' => $card ? $card->getBillingName() : null,
                     ];
                 }
                 break;
             default :
                 break;
+        }
+
+        // Optional parameters
+        if ($card) {
+
+            $data['billing'] = array(
+                'name' => $card->getBillingName(),
+                'address_line1' => $card->getBillingAddress1(),
+                'address_line2' => $card->getBillingAddress2(),
+                'city' => $card->getBillingCity(),
+                'province' => $card->getBillingState(),
+                'country' => $card->getBillingCountry(),
+                'postal_code' => $card->getBillingPostcode(),
+                'phone_number' => $card->getBillingPhone(),
+                'email_address' => $card->getEmail(),
+            );
+
+            $data['shipping'] = array(
+                'name' => $card->getShippingName(),
+                'address_line1' => $card->getShippingAddress1(),
+                'address_line2' => $card->getShippingAddress2(),
+                'city' => $card->getShippingCity(),
+                'province' => $card->getShippingState(),
+                'country' => $card->getShippingCountry(),
+                'postal_code' => $card->getShippingPostcode(),
+                'phone_number' => $card->getShippingPhone(),
+                'email_address' => $card->getEmail(),
+            );
         }
 
         return json_encode($data);

@@ -78,8 +78,8 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     public function sendData($data)
     {
-        $apiPasscode = str_contains($this->getEndpoint(), '/profiles') ? $this->getProfilePasscode() : $this->getTransactionPasscode();
-    
+        $apiPasscode = strpos($this->getEndpoint(), '/profiles') !== false ? $this->getProfilePasscode() : $this->getTransactionPasscode();
+
         $headers = [
             'Content-Type' => 'application/json',
             'Authorization' => 'Passcode ' . base64_encode($this->getMerchantId() . ':' . $apiPasscode)

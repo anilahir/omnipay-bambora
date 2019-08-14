@@ -18,7 +18,7 @@ class PurchaseRequest extends AbstractRequest
 
     public function getData()
     {
-        $this->validate('amount');
+        $this->validate('amount', 'paymentMethod');
 
         $data = array(
             'amount' => $this->getAmount(),
@@ -47,17 +47,17 @@ class PurchaseRequest extends AbstractRequest
                 break;
 
             case 'payment_profile' :
-                if ($this->getCardReference()) {
+                $this->validate('cardReference');
 
-                    $data['payment_profile'] = [
-                        'customer_code' => $this->getCardReference(),
-                        'card_id' => 1,
-                        'complete' => $this->complete
-                    ];
-                }
+                $data['payment_profile'] = [
+                    'customer_code' => $this->getCardReference(),
+                    'card_id' => $this->getCardId() > 0 ? $this->getCardId() : 1,
+                    'complete' => $this->complete
+                ];
                 break;
 
             case 'token' :
+                $this->validate('token');
                 if ($this->getToken()) {
 
                     $data['token'] = [
@@ -71,33 +71,11 @@ class PurchaseRequest extends AbstractRequest
                 break;
         }
 
-        // Optional parameters
-        if ($card) {
-
-            $data['billing'] = array(
-                'name' => $card->getBillingName(),
-                'address_line1' => $card->getBillingAddress1(),
-                'address_line2' => $card->getBillingAddress2(),
-                'city' => $card->getBillingCity(),
-                'province' => $card->getBillingState(),
-                'country' => $card->getBillingCountry(),
-                'postal_code' => $card->getBillingPostcode(),
-                'phone_number' => $card->getBillingPhone(),
-                'email_address' => $card->getEmail(),
-            );
-
-            $data['shipping'] = array(
-                'name' => $card->getShippingName(),
-                'address_line1' => $card->getShippingAddress1(),
-                'address_line2' => $card->getShippingAddress2(),
-                'city' => $card->getShippingCity(),
-                'province' => $card->getShippingState(),
-                'country' => $card->getShippingCountry(),
-                'postal_code' => $card->getShippingPostcode(),
-                'phone_number' => $card->getShippingPhone(),
-                'email_address' => $card->getEmail(),
-            );
-        }
+        // Include optional billing and shipping details if available
+        $billingData = $this->getBillingData();
+        if ($billingData) $data['billing'] = $billingData;
+        $shippingData = $this->getShippingData();
+        if ($shippingData) $data['shipping'] = $shippingData;
 
         return json_encode($data);
     }

@@ -26,6 +26,11 @@ class Response extends AbstractResponse
         return isset($this->data['customer_code']) ? $this->data['customer_code'] : null;
     }
 
+    public function getCard()
+    {
+        return isset($this->data['card']) ? $this->data['card'] : null;
+    }
+
     public function getCode()
     {
         return isset($this->data['code']) ? $this->data['code'] : null;

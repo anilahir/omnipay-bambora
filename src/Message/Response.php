@@ -38,12 +38,12 @@ class Response extends AbstractResponse
 
     public function getTransactionId()
     {
-        return isset($this->data['id']) ? $this->data['id'] : null;
+        return isset($this->data['order_number']) ? $this->data['order_number'] : null;
     }
 
     public function getTransactionReference()
     {
-        return isset($this->data['reference']) ? $this->data['reference'] : null;
+        return isset($this->data['id']) ? $this->data['id'] : null;
     }
 
     public function getMessage()

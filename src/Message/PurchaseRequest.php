@@ -59,12 +59,8 @@ class PurchaseRequest extends AbstractRequest
             case 'token' :
                 $this->validate('token');
                 if ($this->getToken()) {
-
-                    $data['token'] = [
-                        'code' => $this->getToken(),
-                        'complete' => $this->complete,
-                        'name' => $card ? $card->getBillingName() : null,
-                    ];
+                    $data['token'] = $this->getTokenData();
+                    $data['token']['complete'] = $this->complete;
                 }
                 break;
             default :

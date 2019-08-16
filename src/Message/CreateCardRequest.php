@@ -20,20 +20,22 @@ class CreateCardRequest extends AbstractRequest
     public function getData()
     {
         $data = [];
-        $this->getCard()->validate();
+        $card = $this->getCard();
 
-        if($this->getCard()) {
-
+        if ($this->getToken()) {
+            $data['token'] = $this->getTokenData();
+        } else {
+            $card->validate();
             $data['card'] = [
-                'number' => $this->getCard()->getNumber(),
-                'name' => $this->getCard()->getName(),
-                'expiry_month' => $this->getCard()->getExpiryDate('m'),
-                'expiry_year' => $this->getCard()->getExpiryDate('y'),
-                'cvd' => $this->getCard()->getCvv()
+                'number' => $card->getNumber(),
+                'name' => $card->getName(),
+                'expiry_month' => $card->getExpiryDate('m'),
+                'expiry_year' => $card->getExpiryDate('y'),
+                'cvd' => $card->getCvv()
             ];
-
-            $data['billing'] = $this->getBillingData();
         }
+
+        $data['billing'] = $this->getBillingData();
 
         return json_encode($data);
     }

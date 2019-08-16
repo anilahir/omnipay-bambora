@@ -143,6 +143,14 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->getAddressData('Shipping');
     }
 
+    public function getTokenData()
+    {
+        return [
+            'code' => $this->getToken(),
+            'name' => $this->getCard() ? $this->getCard()->getBillingName() : null,
+        ];
+    }
+
     public function sendData($data)
     {
         $apiPasscode = strpos($this->getEndpoint(), '/profiles') !== false ? $this->getProfilePasscode() : $this->getTransactionPasscode();

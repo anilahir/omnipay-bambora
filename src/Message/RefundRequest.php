@@ -6,8 +6,7 @@ class RefundRequest extends AbstractRequest
 {
     public function getEndpoint()
     {
-        $transactionReference = json_decode($this->getTransactionReference());
-        return $this->endpoint . '/payments/' . $transactionReference->id . '/returns';
+        return $this->endpoint . '/payments/' . $this->getTransactionReference() . '/returns';
     }
 
     public function getHttpMethod()
@@ -18,11 +17,10 @@ class RefundRequest extends AbstractRequest
     public function getData()
     {
         $this->validate('amount', 'transactionReference');
-        $transactionReference = json_decode($this->getTransactionReference());
 
         $data = [
             'amount' => $this->getAmount(),
-            'order_number' => $transactionReference->order_number
+            'order_number' => $this->getTransactionId()
         ];
 
         return json_encode($data);

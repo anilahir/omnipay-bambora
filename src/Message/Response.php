@@ -26,6 +26,11 @@ class Response extends AbstractResponse
         return isset($this->data['customer_code']) ? $this->data['customer_code'] : null;
     }
 
+    public function getCard()
+    {
+        return isset($this->data['card']) ? $this->data['card'] : null;
+    }
+
     public function getCode()
     {
         return isset($this->data['code']) ? $this->data['code'] : null;
@@ -38,12 +43,12 @@ class Response extends AbstractResponse
 
     public function getTransactionId()
     {
-        return isset($this->data['id']) ? $this->data['id'] : null;
+        return isset($this->data['order_number']) ? $this->data['order_number'] : null;
     }
 
     public function getTransactionReference()
     {
-        return isset($this->data['reference']) ? $this->data['reference'] : null;
+        return isset($this->data['id']) ? $this->data['id'] : null;
     }
 
     public function getMessage()

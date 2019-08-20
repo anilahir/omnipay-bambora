@@ -20,36 +20,22 @@ class CreateCardRequest extends AbstractRequest
     public function getData()
     {
         $data = [];
-        $this->getCard()->validate();
+        $card = $this->getCard();
 
-        if($this->getCard()) {
-
+        if ($this->getToken()) {
+            $data['token'] = $this->getTokenData();
+        } else {
+            $card->validate();
             $data['card'] = [
-                'number' => $this->getCard()->getNumber(),
-                'name' => $this->getCard()->getName(),
-                'expiry_month' => $this->getCard()->getExpiryDate('m'),
-                'expiry_year' => $this->getCard()->getExpiryDate('y'),
-                'cvd' => $this->getCard()->getCvv()
-            ];
-
-            $province = $this->getCard()->getBillingState();
-            $provinceCode = array_search(strtolower($province), array_map('strtolower', ProvinceCodesDictionary::$codes));
-            $provinceCode = ($provinceCode == false ? "--" : $provinceCode);
-            $country = $this->getCard()->getBillingCountry();
-            $counryCode = array_search(strtolower($country), array_map('strtolower', CountryCodesDictionary::$codes));
-
-            $data['billing'] = [
-                'name' => $this->getCard()->getBillingName(),
-                'address_line1' => $this->getCard()->getBillingAddress1(),
-                'address_line2' => $this->getCard()->getBillingAddress2(),
-                'city' => $this->getCard()->getBillingCity(),
-                'province' => $provinceCode,
-                'country' => $counryCode,
-                'postal_code' => $this->getCard()->getBillingPostcode(),
-                'phone_number' => $this->getCard()->getBillingPhone(),
-                'email_address' => $this->getCard()->getEmail(),
+                'number' => $card->getNumber(),
+                'name' => $card->getName(),
+                'expiry_month' => $card->getExpiryDate('m'),
+                'expiry_year' => $card->getExpiryDate('y'),
+                'cvd' => $card->getCvv()
             ];
         }
+
+        $data['billing'] = $this->getBillingData();
 
         return json_encode($data);
     }

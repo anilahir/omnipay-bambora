@@ -65,6 +65,11 @@ class Gateway extends AbstractGateway
         return $this->createRequest('\Omnipay\Bambora\Message\DeleteCardRequest', $parameters);
     }
 
+    public function getCard(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\Bambora\Message\GetCardRequest', $parameters);
+    }
+
     public function purchase(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\Bambora\Message\PurchaseRequest', $parameters);
